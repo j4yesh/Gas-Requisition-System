@@ -1,0 +1,66 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# If using SQLite
+db.sqlite3
+db.sqlite3-journal
+
+# Django migrations
+**/migrations/__pycache__/
+**/migrations/*.pyc
+
+# Media and static files
+/media/
+/static/
+
+# Virtual environment
+venv/
+.env
+settings.py
+
+# IDE and editor specific files
+.vscode/
+.idea/
+*.swp
+
+# Pip dependencies
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Test and coverage reports
+.tox/
+.nox/
+.coverage
+htmlcov/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+
+# PyCharm specific
+*.iml
+.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Local environment variables
+.envrc
+*.env
+
+# Celery
+celerybeat-schedule
+
+# Other
+*.bak
+*.log
