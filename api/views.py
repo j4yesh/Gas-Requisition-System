@@ -91,7 +91,9 @@ def login(request):
     access_token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
     return JsonResponse({
-        "access": access_token
+        "access": access_token,
+        "role": str(user['role']),
+        "username": str(user['username'])
     })
 
 @api_view(['POST'])

@@ -1,16 +1,27 @@
 {
-  "name": "gasutility",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "ajv": "^8.17.1",
-    "ajv-keywords": "^5.1.0",
+    "ajv": "^8.0.0",
+    "ajv-keywords": "^5.0.0",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.7.9",
+    "crypto-browserify": "^3.12.1",
+    "flowbite-react": "^0.10.2",
+    "framer-motion": "^12.4.2",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "postcss": "^8.5.2",
+    "postcss-loader": "^8.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-scripts": "5.0.1",
+    "react-router-dom": "^7.1.5",
+    "react-scripts": "^5.0.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -36,5 +47,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "tailwind.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv-webpack": "^8.1.0"
   }
 }
