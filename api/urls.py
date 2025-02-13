@@ -14,8 +14,8 @@ urlpatterns=[
     path('servitor/request',views.getRequiForServitor),
     path('user/<str:username>/', views.getUserByUsername, name='get-user-by-username'),
     path('servitor/selfappoint/<str:reqid>',views.appointServitor),
-    path('servitor/status/<str:reqid>/<str:idx>',views.changeStatusForServitor)
-    # path('logout/',views.logout,name='logout'),
+    path('servitor/status/<str:reqid>/<str:idx>',views.changeStatusForServitor),
+    path('logout/',views.logout,name='logout'),
     # path('dashboard/',views.dashboard,name='dashboard')
 
 ]

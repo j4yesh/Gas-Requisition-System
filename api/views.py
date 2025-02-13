@@ -15,6 +15,8 @@ import jwt
 from bson import ObjectId
 import requests
 
+from .Cloudinary import upload_file
+
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -22,28 +24,6 @@ load_dotenv()
 SECRET_KEY=os.getenv('SECRET_KEY')
 
 import requests
-
-def upload_to_file_io(file):
-    url = "https://file.io"
-    
-    try:
-        response = requests.post(url, files={"file": file})
-        print("Status Code:", response.status_code)
-        print("Raw Response:", response.text)  # Print raw response to debug
-
-        if response.status_code == 200:
-            response_json = response.json()
-            print("Parsed JSON:", response_json)
-            return response_json.get("link")
-
-    except requests.exceptions.RequestException as e:
-        print("Request Exception:", e)
-    
-    return None
-
-
-
-
 
 @api_view(['GET'])
 def getData(request):
@@ -114,6 +94,19 @@ def login(request):
         "access": access_token
     })
 
+@api_view(['POST'])
+def logout(request):
+    try:
+        refresh_token = request.data.get("refresh_token")
+        if not refresh_token:
+            return Response({"error": "Refresh token required"}, status=400)
+        
+        token = RefreshToken(refresh_token)
+        token.blacklist() 
+        
+        return Response({"message": "Logged out successfully"}, status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
 
 @api_view(['GET'])
 def getUserByUsername(request, username):
@@ -397,7 +390,7 @@ def uploadFile(request, reqid):
     if not requisition:
         return JsonResponse({"error": "Requisition not found"}, status=404)
     
-    # print(request.FILES)
+    print(request.FILES)
     
     if "File" not in request.FILES:
         return JsonResponse({"error": "No file uploaded"}, status=400)
@@ -406,8 +399,10 @@ def uploadFile(request, reqid):
     if not uploaded_file:
         return JsonResponse({"error": "No file uploaded"}, status=400)
     
+    link = ""
     try:
-        link = upload_to_file_io(uploaded_file)
+        link =  upload_file(uploaded_file);
+
     except Exception as e:
         return JsonResponse({"error": f"File upload failed: {str(e)}"}, status=500)
 
