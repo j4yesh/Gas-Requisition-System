@@ -220,11 +220,17 @@ def getRequi(request):
     if not user:
         return JsonResponse({"error": "User not found"}, status=404)
     
-    if user.get("role") != "customer":
-        return JsonResponse({"error": "Permission denied"}, status=403)
+    fetchedReq=list()
+    if user.get("role") == "customer":
+        fetchedReq = list(RequisitionCollection.find({"username": user.get("username")}))
+    elif user.get("role")=="servitor":
+        fetchedReq = list(RequisitionCollection.find({}))
+    else:
+        return JsonResponse({"error": "role not found"}, status=404)
     
-    fetchedReq = list(RequisitionCollection.find({"username": user.get("username")}, {"_id": 0}))
-
+    for req in fetchedReq:
+            req["_id"] = str(req["_id"])
+        
     return JsonResponse({"requisitions": fetchedReq}, safe=False)
 
 

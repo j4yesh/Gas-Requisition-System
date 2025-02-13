@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-const API_URL=process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
-console.log(API_URL)
+console.log(API_URL);
 
 // Auth Context
 const AuthContext = React.createContext(null);
@@ -13,19 +13,24 @@ const useAuth = () => {
 
 // Auth Provider Component
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null; // Parse user from localStorage
+  });
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   const login = (userData, authToken) => {
     setUser(userData);
     setToken(authToken);
     localStorage.setItem('token', authToken);
+    localStorage.setItem('user', JSON.stringify(userData)); // Store user as JSON string
   };
 
   const logout = () => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   return (
@@ -38,7 +43,7 @@ const AuthProvider = ({ children }) => {
 const CreateRequest = ({ onNavigate }) => {
   const [formData, setFormData] = useState({
     type: '',
-    detail: ''
+    detail: '',
   });
   const [error, setError] = useState('');
   const { token } = useAuth();
@@ -50,13 +55,15 @@ const CreateRequest = ({ onNavigate }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-      
+
+      console.log(response);
+
       if (!response.ok) throw new Error('Failed to submit request');
-      
+
       onNavigate('dashboard');
     } catch (err) {
       setError(err.message);
@@ -81,20 +88,20 @@ const CreateRequest = ({ onNavigate }) => {
 
       <main className="max-w-3xl mx-auto px-4 py-6">
         {error && <div className="text-red-500 mb-4">{error}</div>}
-        
+
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">Request Type</label>
             <select
               value={formData.type}
-              onChange={(e) => setFormData({...formData, type: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               className="w-full px-4 py-2 border rounded"
               required
             >
               <option value="">Select Request Type</option>
-              <option value="Gas Leak">Gas Leak</option>
-              <option value="Meter Reading">Meter Reading</option>
-              <option value="Connection Request">New Connection</option>
+              <option value="Gas A">Gas A</option>
+              <option value="Gas B">Gas B</option>
+              <option value="Gas C">Gas C</option>
             </select>
           </div>
 
@@ -102,7 +109,7 @@ const CreateRequest = ({ onNavigate }) => {
             <label className="block text-gray-700 font-medium mb-2">Details</label>
             <textarea
               value={formData.detail}
-              onChange={(e) => setFormData({...formData, detail: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, detail: e.target.value })}
               className="w-full px-4 py-2 border rounded"
               rows="4"
               required
@@ -160,8 +167,6 @@ const App = () => {
   );
 };
 
-
-
 // Login Component
 const Login = ({ onNavigate }) => {
   const [username, setUsername] = useState('');
@@ -177,22 +182,21 @@ const Login = ({ onNavigate }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-  
+
       const data = await response.json();
       console.log(username);
-  
+
       if (response.ok) {
         const { role, access } = data; // Extract role from API response
         login({ username, role }, access); // Store role along with username
         onNavigate('dashboard');
-        console.log("Switching to dashboard");
+        console.log('Switching to dashboard');
       } else {
         setError(data.error);
       }
     } catch (err) {
       setError('Failed to login');
     }
-
   };
 
   return (
@@ -244,13 +248,13 @@ const Register = ({ onNavigate }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    role: 'customer'
+    role: 'customer',
   });
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
     try {
       const response = await fetch(`${API_URL}/register/`, {
         method: 'POST',
@@ -258,7 +262,7 @@ const Register = ({ onNavigate }) => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         onNavigate('login');
       } else {
@@ -279,7 +283,7 @@ const Register = ({ onNavigate }) => {
             <input
               type="text"
               value={formData.username}
-              onChange={(e) => setFormData({...formData, username: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               placeholder="Username"
               className="w-full px-4 py-2 border rounded"
             />
@@ -288,7 +292,7 @@ const Register = ({ onNavigate }) => {
             <input
               type="password"
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               placeholder="Password"
               className="w-full px-4 py-2 border rounded"
             />
@@ -296,7 +300,7 @@ const Register = ({ onNavigate }) => {
           <div>
             <select
               value={formData.role}
-              onChange={(e) => setFormData({...formData, role: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               className="w-full px-4 py-2 border rounded"
             >
               <option value="customer">Customer</option>
@@ -323,8 +327,7 @@ const Register = ({ onNavigate }) => {
   );
 };
 
-
-
+// Dashboard Component
 const Dashboard = ({ onNavigate }) => {
   const { user, token, logout } = useAuth();
   const [requisitions, setRequisitions] = useState([]);
@@ -333,21 +336,23 @@ const Dashboard = ({ onNavigate }) => {
   useEffect(() => {
     const fetchRequisitions = async () => {
       try {
-        console.log("Fetching the data");
-        const endpoint = user?.role === 'servitor' 
-          ? `${API_URL}/servitor/request`
-          : `${API_URL}/request/get`;
+        console.log('Fetching the data');
+        console.log('role: ' + user?.role);
+        const endpoint =
+          user?.role === 'servitor'
+            ? `${API_URL}/servitor/request`
+            : `${API_URL}/request/get`;
 
         const response = await fetch(endpoint, {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (!response.ok) throw new Error('Failed to fetch requisitions');
 
         const data = await response.json();
-        console.log("Fetched data", data);
+        console.log('Fetched data', data);
         console.log(user);
         setRequisitions(data.requisitions);
       } catch (err) {
@@ -363,9 +368,69 @@ const Dashboard = ({ onNavigate }) => {
     onNavigate('login');
   };
 
+  const handleSelfAppoint = async (reqId) => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Authorization token is missing');
+      return;
+    }
+
+    const response = await fetch(`${API_URL}/servitor/selfappoint/${reqId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) throw new Error('Failed to self-appoint');
+
+    alert('You have been assigned to this request');
+    window.location.reload();
+
+  } catch (error) {
+    console.error('Error appointing self:', error);
+    alert('Failed to appoint yourself');
+  }
+};
+
+
+  const handleStatusChange = async (reqId, idx) => {
+    try {
+      const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+      if (!token) {
+        alert('Authorization token is missing');
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/servitor/status/${reqId}/${idx}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      alert('Status updated successfully');
+
+      // You may want to refresh data after update
+      window.location.reload();
+
+    } catch (error) {
+      console.error('Error updating status:', error);
+      alert('Failed to update status');
+    }
+  };
+
   // Separate requests into two lists (for servitors)
-  const myRequests = requisitions.filter(req => req.servitor === user?.username);
-  const otherRequests = requisitions.filter(req => req.servitor !== user?.username);
+  const myRequests = requisitions.filter((req) => req.servitor === user?.username);
+  const otherRequests = requisitions.filter((req) => req.servitor !== user?.username);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -374,6 +439,13 @@ const Dashboard = ({ onNavigate }) => {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Gas Requisition System</h1>
+            <p className="text-1sm font-bold align-top">
+  <span className="text-1sm font-bold block">Bynry Services Backend Developer Intern Case study</span>
+  Applicant Name: Jayesh Badgujar
+</p>
+
+            
+
             <div className="flex items-center space-x-4">
               {user?.role === 'customer' && (
                 <button
@@ -398,40 +470,52 @@ const Dashboard = ({ onNavigate }) => {
       <main className="max-w-7xl mx-auto px-4 py-6">
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
-        {user?.role === "servitor" ? (
+        {user?.role === 'servitor' ? (
           <div className="flex space-x-6">
             {/* Requests Assigned to Other Servitors */}
             <div className="w-1/2 h-[500px] overflow-y-auto bg-gray-100 p-4 rounded-lg">
               <h2 className="text-lg font-semibold mb-4">Other Requests</h2>
               <div className="space-y-4">
                 {otherRequests.map((req, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg shadow">
-                    <h3 className="text-lg font-semibold">Request Type: {req.type}</h3>
-                    <p className="text-gray-600">Servitor: {req.servitor}</p>
-                    <p className="mt-2">{req.detail}</p>
-                    <div className="mt-4">
-                      <h4 className="font-medium mb-2">Progress:</h4>
-                      <div className="space-y-2">
-                        {req.status.map((status, idx) => (
-                          <div
-                            key={idx}
-                            className={`p-2 rounded ${
-                              status.completed ? 'bg-green-100' : 'bg-gray-100'
-                            }`}
-                          >
-                            <span className={status.completed ? 'text-green-600' : 'text-gray-600'}>
-                              {status.stage}
-                            </span>
-                            {status.timestamp && (
-                              <span className="text-sm text-gray-500 ml-2">
-                                {new Date(status.timestamp).toLocaleString()}
-                              </span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  
+                  <div key={index} className="bg-white p-3 rounded-lg shadow">
+    <h3 className="text-md font-semibold">Request Type: {req.type}</h3>
+    <p className="text-sm text-gray-600">Servitor: {req.servitor || 'Not Assigned'}</p>
+    <p className="text-sm text-gray-600">Customer: {req.username}</p>
+    <p className="mt-1 text-sm">{req.detail}</p>
+
+    {/* Self Appoint Button */}
+    {(!req.servitor || req.servitor === 'To be appointed') && (
+      <button
+        onClick={() => handleSelfAppoint(req._id)}
+        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Self Appoint
+      </button>
+    )}
+
+    <div className="mt-2">
+      <h4 className="font-medium text-sm mb-1">Progress:</h4>
+      <div className="space-y-1">
+        {req.status.map((status, idx) => (
+          <div
+            key={idx}
+            className={`p-1 rounded ${status.completed ? 'bg-green-100' : 'bg-gray-100'}`}
+          >
+            <span className={status.completed ? 'text-green-600' : 'text-gray-600'}>
+              {status.stage}
+            </span>
+            {status.timestamp && (
+              <span className="text-xs text-gray-500 ml-1">
+                {new Date(status.timestamp).toLocaleString()}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
                 ))}
               </div>
             </div>
@@ -441,25 +525,35 @@ const Dashboard = ({ onNavigate }) => {
               <h2 className="text-lg font-semibold mb-4">My Assigned Requests</h2>
               <div className="space-y-4">
                 {myRequests.map((req, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg shadow">
-                    <h3 className="text-lg font-semibold">Request Type: {req.type}</h3>
-                    <p className="text-gray-600">Servitor: {req.servitor}</p>
-                    <p className="mt-2">{req.detail}</p>
-                    <div className="mt-4">
-                      <h4 className="font-medium mb-2">Progress:</h4>
-                      <div className="space-y-2">
+                  <div key={index} className="bg-white p-2 rounded-lg shadow">
+                    <h3 className="text-md font-semibold">Request Type: {req.type}</h3>
+                    <p className="text-sm text-gray-600">Servitor: {req.servitor}</p>
+                    <p className="text-sm text-gray-600">Customer: {req.username}</p>
+                    <p className="mt-1 text-sm">{req.detail}</p>
+                    <div className="mt-2">
+                      <h4 className="font-medium text-sm mb-1">Progress:</h4>
+                      <div className="space-y-1">
                         {req.status.map((status, idx) => (
                           <div
                             key={idx}
-                            className={`p-2 rounded ${
+                            className={`p-1 rounded flex items-center gap-2 ${
                               status.completed ? 'bg-green-100' : 'bg-gray-100'
                             }`}
                           >
-                            <span className={status.completed ? 'text-green-600' : 'text-gray-600'}>
+                            <input
+                              type="checkbox"
+                              checked={status.completed}
+                              onChange={() => handleStatusChange(req._id, idx)}
+                              disabled={status.completed} // Prevent re-updating
+                              className="cursor-pointer"
+                            />
+                            <span
+                              className={status.completed ? 'text-green-600' : 'text-gray-600'}
+                            >
                               {status.stage}
                             </span>
                             {status.timestamp && (
-                              <span className="text-sm text-gray-500 ml-2">
+                              <span className="text-xs text-gray-500 ml-1">
                                 {new Date(status.timestamp).toLocaleString()}
                               </span>
                             )}
@@ -476,17 +570,18 @@ const Dashboard = ({ onNavigate }) => {
           // Default display for non-servitors
           <div className="grid gap-6">
             {requisitions.map((req, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-semibold">Request Type: {req.type}</h3>
-                <p className="text-gray-600">Servitor: {req.servitor}</p>
-                <p className="mt-2">{req.detail}</p>
-                <div className="mt-4">
-                  <h4 className="font-medium mb-2">Progress:</h4>
-                  <div className="space-y-2">
+              <div key={index} className="bg-white p-4 rounded-lg shadow">
+                <h3 className="text-md font-semibold">Request Type: {req.type}</h3>
+                <p className="text-sm text-gray-600">Servitor: {req.servitor}</p>
+                <p className="text-sm text-gray-600">Customer: {req.username}</p>
+                <p className="mt-1 text-sm">{req.detail}</p>
+                <div className="mt-2">
+                  <h4 className="font-medium text-sm mb-1">Progress:</h4>
+                  <div className="space-y-1">
                     {req.status.map((status, idx) => (
                       <div
                         key={idx}
-                        className={`p-2 rounded ${
+                        className={`p-1 rounded ${
                           status.completed ? 'bg-green-100' : 'bg-gray-100'
                         }`}
                       >
@@ -494,7 +589,7 @@ const Dashboard = ({ onNavigate }) => {
                           {status.stage}
                         </span>
                         {status.timestamp && (
-                          <span className="text-sm text-gray-500 ml-2">
+                          <span className="text-xs text-gray-500 ml-1">
                             {new Date(status.timestamp).toLocaleString()}
                           </span>
                         )}
@@ -510,8 +605,5 @@ const Dashboard = ({ onNavigate }) => {
     </div>
   );
 };
-
-
-
 
 export default App;
