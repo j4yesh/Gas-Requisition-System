@@ -202,7 +202,23 @@ const Login = ({ onNavigate }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+      <p className="text-1sm font-serif text-center">
+        <span className="block">Bynry Services Backend Developer Intern Case Study</span>
+        Applicant Name: <span className="font-bold">Jayesh Badgujar</span>
+      </p>
+
         <h2 className="text-3xl font-bold text-center">Login</h2>
+        <p className="text-1lr font-bold align-top">
+  <span className="text-1sm font-bold block">
+    For testing, you can use this credential also:
+  </span>
+  <br />
+  <strong>Servitor →</strong> username: <code>servitor1</code>|password: <code>123</code>
+  <br />
+  <strong>Customer →</strong> username: <code>customer1</code>|password: <code>123</code>
+</p>
+
+
         {error && <div className="text-red-500 text-center">{error}</div>}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div>
