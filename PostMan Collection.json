@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "71ec0b26-f3c8-4af2-904c-9ecbc886f018",
+		"name": "Gas Requisition System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29696254"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"1234\",\r\n    \"password\":\"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/register/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n     \"username\":\"123\",\r\n    \"password\":\"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/login/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reqSubmit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjOGY4ZTkyZjZhZjFiYmM3Yzg0NyIsInVzZXJuYW1lIjoic2Vydml0b3IxIiwiZXhwIjoxNzM5NDM5Njg0LCJpYXQiOjE3MzkzNTMyODR9.XqTTf4HAfOECvChOl22NzxMI31rf0EKknWtWY9pgFkw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"Cylinder order\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/request/submit",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"request",
+						"submit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fileUpload",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjOGY4ZTkyZjZhZjFiYmM3Yzg0NyIsInVzZXJuYW1lIjoic2Vydml0b3IxIiwiZXhwIjoxNzM5NDM5Njg0LCJpYXQiOjE3MzkzNTMyODR9.XqTTf4HAfOECvChOl22NzxMI31rf0EKknWtWY9pgFkw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "",
+							"type": "file",
+							"src": "postman-cloud:///1efe97e9-84bf-42c0-bc21-9bdfaca4696b"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/request/attach/67ac67d7853be73d1f87584b",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"request",
+						"attach",
+						"67ac67d7853be73d1f87584b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getrequi",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjOGY4ZTkyZjZhZjFiYmM3Yzg0NyIsInVzZXJuYW1lIjoic2Vydml0b3IxIiwiZXhwIjoxNzM5NDM5Njg0LCJpYXQiOjE3MzkzNTMyODR9.XqTTf4HAfOECvChOl22NzxMI31rf0EKknWtWY9pgFkw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/request/get",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"request",
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjMTdmOWY2MWFiZWFkYWM4NThhYSIsInVzZXJuYW1lIjoiMTIzNCIsImV4cCI6MTczOTM5NzQ3NSwiaWF0IjoxNzM5MzExMDc1fQ.1q5aCXb14f-Ebveg-XOPGVMdy6WE01WLYomcePPrt58",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/user/customer1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"customer1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUser",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjMTdmOWY2MWFiZWFkYWM4NThhYSIsInVzZXJuYW1lIjoiMTIzNCIsImV4cCI6MTczOTM5NzQ3NSwiaWF0IjoxNzM5MzExMDc1fQ.1q5aCXb14f-Ebveg-XOPGVMdy6WE01WLYomcePPrt58",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/alluser",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"alluser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getrequiforServitor",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjOGY4ZTkyZjZhZjFiYmM3Yzg0NyIsInVzZXJuYW1lIjoic2Vydml0b3IxIiwiZXhwIjoxNzM5NTYwNDc1LCJpYXQiOjE3Mzk0NzQwNzV9.bpq6MQaEemBAcJ2fTiz2mw4U1TS3UM3JIEP8rMohm-M",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/servitor/request",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"servitor",
+						"request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "selfAppoint",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjOGY4ZTkyZjZhZjFiYmM3Yzg0NyIsInVzZXJuYW1lIjoic2Vydml0b3IxIiwiZXhwIjoxNzM5NDM5Njg0LCJpYXQiOjE3MzkzNTMyODR9.XqTTf4HAfOECvChOl22NzxMI31rf0EKknWtWY9pgFkw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/servitor/status/67ac67d7853be73d1f87584b/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"servitor",
+						"status",
+						"67ac67d7853be73d1f87584b",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateStatusForServitor",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWJjOGY4ZTkyZjZhZjFiYmM3Yzg0NyIsInVzZXJuYW1lIjoic2Vydml0b3IxIiwiZXhwIjoxNzM5NTYxNjQwLCJpYXQiOjE3Mzk0NzUyNDB9.vTBBPz24xALDXIJu5ePOn-gqzMhaHrv-aZG9-qFcrkk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/servitor/selfappoint/67ac67d7853be73d1f87584b",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"servitor",
+						"selfappoint",
+						"67ac67d7853be73d1f87584b"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
